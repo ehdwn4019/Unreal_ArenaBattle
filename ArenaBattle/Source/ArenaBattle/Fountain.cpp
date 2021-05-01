@@ -2,7 +2,6 @@
 
 #include "Fountain.h"
 
-
 // Sets default values
 AFountain::AFountain()
 {
@@ -23,7 +22,8 @@ AFountain::AFountain()
 	Splash->SetRelativeLocation(FVector(0.0f, 0.0f, 195.0f));
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh>
-		SM_BODY(TEXT("/ Game / InfinityBladeGrassLands / Environments / Plains / Env_Plains_Ruins / StaticMesh / SM_Plains_Castle_Fountain_01.SM_Plains_Castle_Fountain_01"));
+		SM_BODY(TEXT("/Game/InfinityBladeGrassLands/Environments/Plains/Env_Plains_Ruins/StaticMesh/SM_Plains_Castle_Fountain_01.SM_Plains_Castle_Fountain_01"));
+	
 	if (SM_BODY.Succeeded())
 	{
 		Body->SetStaticMesh(SM_BODY.Object);
@@ -50,10 +50,10 @@ void AFountain::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UE_LOG(ArenaBattle, Warning, TEXT("Actor NAme : %s, ID : %d, Loaction X : %.3f"), *GetName(), ID, GetActorLocation().X);
+	//UE_LOG(ArenaBattle, Warning, TEXT("Actor Name : %s, ID : %d, Loaction X : %.3f"), *GetName(), ID, GetActorLocation().X);
 
 	ABLOG_S(Warning);
-	ABLOG(Warning, TEXT("Actor Name : %s, ID : %d, Location X : %.3f"), *GetName(), ID, GetActorLocation().X);
+	ABLOG(Warning, TEXT("Actor Nameaaaaaaaa : %s, ID : %d , Location X : %.3f"), *GetName(), ID, GetActorLocation().X);
 	
 	
 }
