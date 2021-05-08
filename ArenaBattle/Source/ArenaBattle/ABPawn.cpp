@@ -32,12 +32,31 @@ AABPawn::AABPawn()
 		Mesh->SetSkeletalMesh(SK_CARDBOARD.Object);
 	}
 
+	//블루프린트를 관리하는 방법
+	Mesh->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+
+	static ConstructorHelpers::FClassFinder<UAnimInstance> WARRIOR_ANIM(TEXT("/Game/Book/Animations/WarriorAnimBlueprint.WarriorAnimBlueprint_c"));
+	if (WARRIOR_ANIM.Succeeded())
+	{
+		Mesh->SetAnimInstanceClass(WARRIOR_ANIM.Class);
+	}
+
 }
 
 // Called when the game starts or when spawned
 void AABPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//코드로 애니메이션 관리하는 방법
+	//Mesh->SetAnimationMode(EAnimationMode::AnimationSingleNode);
+	//UAnimationAsset* AnimAsset = LoadObject<UAnimationAsset>(nullptr, TEXT("/Game/Book/Animations/WarriorRun.WarriorRun"));
+	//if (AnimAsset != nullptr)
+	//{
+	//	Mesh->PlayAnimation(AnimAsset, true);
+	//}
+
+	
 	
 }
 
@@ -65,5 +84,19 @@ void AABPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis(TEXT("UpDown"), this, &AABPawn::UpDown);
+	PlayerInputComponent->BindAxis(TEXT("LeftRight"), this, &AABPawn::LeftRight);
+
+
+}
+
+void AABPawn::UpDown(float NewAxisValue)
+{
+	ABLOG(Warning, TEXT("%f"), NewAxisValue);
+}
+
+void AABPawn::LeftRight(float NewAxisValue)
+{
+	ABLOG(Warning, TEXT("%f"), NewAxisValue);
 }
 
