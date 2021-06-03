@@ -16,10 +16,17 @@ class ARENABATTLE_API UABAnimInstance : public UAnimInstance
 	
 public:
 	UABAnimInstance();
+	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
+
+	//폰에서 애님인스턴스에 접근하는 방법
+	//void SetPawnSpeed(float NewPawnSpeed) { CurrentPawnSpeed = NewPawnSpeed; }
 
 private:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
 		float CurrentPawnSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Pawn, Meta = (AllowPrivateAccess = true))
+		bool IsInAir;
 	
 	
 };
