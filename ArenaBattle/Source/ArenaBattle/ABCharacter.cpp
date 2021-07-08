@@ -5,7 +5,6 @@
 //폰에서 애님인스턴스에 접근하는 방법
 //#include "ABAnimInstance.h"
 
-
 // Sets default values
 AABCharacter::AABCharacter()
 {
