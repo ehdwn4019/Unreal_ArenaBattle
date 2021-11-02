@@ -2,6 +2,7 @@
 
 #include "ABCharacter.h"
 #include "ABAnimInstance.h"
+#include "DrawDebugHelpers.h"
 
 //폰에서 애님인스턴스에 접근하는 방법
 //#include "ABAnimInstance.h"
@@ -43,6 +44,9 @@ AABCharacter::AABCharacter()
 	IsAttacking = false;
 	MaxCombo = 4;
 	AttackEndComboState();
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("ABCharacter"));
+	AttackRange = 200.0f;
+	AttackRadius = 50.0f;
 }
 
 // Called when the game starts or when spawned
@@ -217,7 +221,6 @@ void AABCharacter::PostInitializeComponents()
 
 	ABAnim->OnNextAttackCheck.AddLambda([this]()->void {
 
-		ABLOG(Warning, TEXT("OnNextAttackCheck"));
 		CanNextCombo = false;
 
 		if (IsComboInputOn)
@@ -227,6 +230,8 @@ void AABCharacter::PostInitializeComponents()
 		}
 
 	});
+
+	ABAnim->OnAttackHitCheck.AddUObject(this, &AABCharacter::AttackCheck);
 
 	//auto AnimInstance = Cast<UABAnimInstance>(GetMesh()->GetAnimInstance());
 	//ABCHECK(nullptr != AnimInstance);
@@ -254,7 +259,7 @@ void AABCharacter::Attack()
 		IsAttacking = true;
 	}
 
-	ABLOG_S(Warning);
+	//ABLOG_S(Warning);
 
 	//ABAnim->PlayAttackMontage();
 
@@ -287,4 +292,66 @@ void AABCharacter::AttackEndComboState()
 	CanNextCombo = false;
 	CurrentCombo = 0;
 }
+
+void AABCharacter::AttackCheck()
+{
+	FHitResult HitResult;
+	FCollisionQueryParams Params(NAME_None, false, this);
+	bool bResult = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		GetActorLocation(),
+		GetActorLocation() + GetActorForwardVector() * AttackRange,
+		FQuat::Identity,
+		ECollisionChannel::ECC_GameTraceChannel2,
+		FCollisionShape::MakeSphere(AttackRange),
+		Params
+		);
+
+#if ENABLE_DRAW_DEBUG
+
+	FVector TraceVec = GetActorForwardVector() * AttackRange;
+	FVector Center = GetActorLocation() + TraceVec * 0.5f;
+	float HalfHeight = AttackRange * 0.5f + AttackRadius;
+	FQuat CapsuleRot = FRotationMatrix::MakeFromZ(TraceVec).ToQuat();
+	FColor DrawColor = bResult ? FColor::Green : FColor::Red;
+	float DebugLifeTime = 5.0f;
+
+	DrawDebugCapsule(GetWorld(),
+		Center,
+		HalfHeight,
+		AttackRadius,
+		CapsuleRot,
+		DrawColor,
+		false,
+		DebugLifeTime
+	);
+#endif
+
+	if (bResult)
+	{
+		if (HitResult.Actor.IsValid())
+		{
+			ABLOG(Warning, TEXT("Hit Actor Name : %s"), *HitResult.Actor->GetName());
+
+			FDamageEvent DamageEvent;
+			HitResult.Actor->TakeDamage(50.0f, DamageEvent, GetController(), this);
+		}
+	}
+}
+
+float AABCharacter::TakeDamage(float DamageAmount, FDamageEvent const & DamageEvent, AController * EventInstigator, AActor * DamageCauser)
+{
+	float FinalDamage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+	ABLOG(Warning, TEXT("Actor : %s took Damage : %f"), *GetName(), FinalDamage);
+
+	if (FinalDamage > 0.0f)
+	{
+		ABAnim->SetDeadAnim();
+		SetActorEnableCollision(false);
+	}
+
+	return FinalDamage;
+}
+
+
 
