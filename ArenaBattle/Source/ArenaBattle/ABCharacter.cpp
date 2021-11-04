@@ -2,6 +2,7 @@
 
 #include "ABCharacter.h"
 #include "ABAnimInstance.h"
+#include "ABWeapon.h"
 #include "DrawDebugHelpers.h"
 
 //폰에서 애님인스턴스에 접근하는 방법
@@ -47,6 +48,21 @@ AABCharacter::AABCharacter()
 	GetCapsuleComponent()->SetCollisionProfileName(TEXT("ABCharacter"));
 	AttackRange = 200.0f;
 	AttackRadius = 50.0f;
+
+	//기존 무기 장착 코드 
+	//FName WeaponSocket(TEXT("hand_rSocket"));
+	//if (GetMesh()->DoesSocketExist(WeaponSocket))
+	//{
+	//	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WEAPON"));
+	//	static ConstructorHelpers::FObjectFinder<USkeletalMesh> SK_WEAPON(TEXT("/Game/InfinityBladeWeapons/Weapons/Blade/Swords/Blade_BlackKnight/SK_Blade_BlackKnight.SK_Blade_BlackKnight"));
+	//
+	//	if (SK_WEAPON.Succeeded())
+	//	{
+	//		Weapon->SetSkeletalMesh(SK_WEAPON.Object);
+	//	}
+	//
+	//	Weapon->SetupAttachment(GetMesh(), WeaponSocket);
+	//}
 }
 
 // Called when the game starts or when spawned
@@ -54,6 +70,30 @@ void AABCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	//게임시작시 무기장착 
+	//FName WeaponSocket(TEXT("hand_rSocket"));
+	//auto CurWeapon = GetWorld()->SpawnActor<AABWeapon>(FVector::ZeroVector, FRotator::ZeroRotator); \
+	//	if (nullptr != CurWeapon)
+	//	{
+	//		CurWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
+	//	}
+}
+
+bool AABCharacter::CanSetWeapon()
+{
+	return (nullptr == CurrentWeapon);
+}
+
+void AABCharacter::SetWeapon(AABWeapon * NewWeapon)
+{
+	ABCHECK(nullptr != NewWeapon && nullptr == CurrentWeapon);
+	FName WeaponSocket(TEXT("hand_rSocket"));
+	if (nullptr != NewWeapon)
+	{
+		NewWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
+		NewWeapon->SetOwner(this);
+		CurrentWeapon = NewWeapon;
+	}
 }
 
 void AABCharacter::SetControlMode(EControlMode NewControlMode)
