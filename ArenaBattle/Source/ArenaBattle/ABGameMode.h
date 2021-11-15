@@ -18,7 +18,4 @@ public:
 	AABGameMode();
 
 	virtual void PostLogin(APlayerController* NewPlayer) override;
-	
-	
-	
 };
