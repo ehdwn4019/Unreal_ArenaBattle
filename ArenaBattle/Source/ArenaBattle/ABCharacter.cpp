@@ -7,6 +7,7 @@
 #include "DrawDebugHelpers.h"
 #include "Components/WidgetComponent.h"
 #include "ABCharacterWidget.h"
+#include "ABAIController.h"
 
 //폰에서 애님인스턴스에 접근하는 방법
 //#include "ABAnimInstance.h"
@@ -79,6 +80,8 @@ AABCharacter::AABCharacter()
 	//
 	//	Weapon->SetupAttachment(GetMesh(), WeaponSocket);
 	//}
+	AIControllerClass = AABAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 }
 
 // Called when the game starts or when spawned
