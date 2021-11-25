@@ -8,6 +8,8 @@
 #include "Components/WidgetComponent.h"
 #include "ABCharacterWidget.h"
 #include "ABAIController.h"
+//#include "ABCharacterSetting.h"
+//#include "ABGameInstance.h"
 
 //폰에서 애님인스턴스에 접근하는 방법
 //#include "ABAnimInstance.h"
@@ -82,6 +84,15 @@ AABCharacter::AABCharacter()
 	//}
 	AIControllerClass = AABAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	//auto DefaultSetting = GetDefault<UABCharacterSetting>();
+	//if (DefaultSetting->CharacterAssets.Num() > 0)
+	//{
+	//	for (auto CharacterAsset : DefaultSetting->CharacterAssets)
+	//	{
+	//		ABLOG(Warning, TEXT("Character Asset : %s"), *CharacterAsset.ToString());
+	//	}
+	//}
 }
 
 // Called when the game starts or when spawned
@@ -96,6 +107,19 @@ void AABCharacter::BeginPlay()
 	//	{
 	//		CurWeapon->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetNotIncludingScale, WeaponSocket);
 	//	}
+
+	//if (!IsPlayerControlled())
+	//{
+	//	auto DefaultSetting = GetDefault<UABCharacterSetting>();
+	//	int32 RandIndex = FMath::RandRange(0, DefaultSetting->CharacterAssets.Num() - 1);
+	//	CharacterAssetToLoad = DefaultSetting->CharacterAssets[RandIndex];
+	//
+	//	auto ABGameInstance = Cast<UABGameInstance>(GetGameInstance());
+	//	if (nullptr != ABGameInstance)
+	//	{
+	//		AssetStreamingHandle = ABGameInstance->StreamableManager.RequestAsyncLoad(CharacterAssetToLoad, FStreamableDelegate::CreateUObject(this, &AABCharacter::OnAssetLoadCompleted));
+	//	}
+	//}
 }
 
 bool AABCharacter::CanSetWeapon()
@@ -342,8 +366,17 @@ void AABCharacter::PossessedBy(AController * NewController)
 		SetControlMode(EControlMode::NPC);
 		GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 	}
-	
 }
+
+//void AABCharacter::OnAssetLoadCompleted()
+//{
+//	USkeletalMesh* AssetLoaded = Cast<USkeletalMesh>(AssetStreamingHandle->GetLoadedAsset());
+//	AssetStreamingHandle.Reset();
+//	if (nullptr != AssetLoaded)
+//	{
+//		GetMesh()->SetSkeletalMesh(AssetLoaded);
+//	}
+//}
 
 void AABCharacter::Attack()
 {
