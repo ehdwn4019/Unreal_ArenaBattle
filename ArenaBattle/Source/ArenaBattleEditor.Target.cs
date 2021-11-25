@@ -9,6 +9,6 @@ public class ArenaBattleEditorTarget : TargetRules
 	{
 		Type = TargetType.Editor;
 
-		ExtraModuleNames.AddRange( new string[] { "ArenaBattle" , "ArenaBattleSetting"} );
+		ExtraModuleNames.AddRange( new string[] { "ArenaBattle" } );
 	}
 }

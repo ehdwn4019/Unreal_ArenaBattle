@@ -151,14 +151,7 @@ void AABCharacter::SetControlMode(EControlMode NewControlMode)
 		GetCharacterMovement()->bUseControllerDesiredRotation = true;
 		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.f, 0.0f);
 		break;
-	case EControlMode::NPC:
-		bUseControllerRotationYaw = false;
-		GetCharacterMovement()->bUseControllerDesiredRotation = false;
-		GetCharacterMovement()->bOrientRotationToMovement = true;
-		GetCharacterMovement()->RotationRate = FRotator(0.0f, 480.0f, 0.0f);
-		break;
 	}
-	
 }
 
 // Called every frame
@@ -327,24 +320,6 @@ void AABCharacter::PostInitializeComponents()
 	
 }
 
-
-void AABCharacter::PossessedBy(AController * NewController)
-{
-	Super::PossessedBy(NewController);
-
-	if (IsPlayerControlled())
-	{
-		SetControlMode(EControlMode::DIABLO);
-		GetCharacterMovement()->MaxWalkSpeed = 600.0f;
-	}
-	else
-	{
-		SetControlMode(EControlMode::NPC);
-		GetCharacterMovement()->MaxWalkSpeed = 300.0f;
-	}
-	
-}
-
 void AABCharacter::Attack()
 {
 	if (IsAttacking)
@@ -381,7 +356,6 @@ void AABCharacter::OnAttackMontageEnded(UAnimMontage* Montage,bool bInterrputed)
 	ABCHECK(CurrentCombo > 0);
 	IsAttacking = false;
 	AttackEndComboState();
-	OnAttackEnd.Broadcast();
 }
 
 void AABCharacter::AttackStartComboState()
