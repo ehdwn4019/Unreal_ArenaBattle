@@ -175,7 +175,14 @@ void AABCharacter::SetControlMode(EControlMode NewControlMode)
 		GetCharacterMovement()->bUseControllerDesiredRotation = true;
 		GetCharacterMovement()->RotationRate = FRotator(0.0f, 720.f, 0.0f);
 		break;
+	case EControlMode::NPC:
+		bUseControllerRotationYaw = false;
+		GetCharacterMovement()->bUseControllerDesiredRotation = false;
+		GetCharacterMovement()->bOrientRotationToMovement = true;
+		GetCharacterMovement()->RotationRate = FRotator(0.0f, 480.0f, 0.0f);
+		break;
 	}
+	
 }
 
 // Called every frame
@@ -344,7 +351,6 @@ void AABCharacter::PostInitializeComponents()
 	
 }
 
-<<<<<<< HEAD:ArenaBattle/Source/ArenaBattle/Private/ABCharacter.cpp
 
 void AABCharacter::PossessedBy(AController * NewController)
 {
@@ -372,8 +378,6 @@ void AABCharacter::PossessedBy(AController * NewController)
 //	}
 //}
 
-=======
->>>>>>> parent of d13147e... - NPC의 추격 기능 구현:ArenaBattle/Source/ArenaBattle/ABCharacter.cpp
 void AABCharacter::Attack()
 {
 	if (IsAttacking)
@@ -410,6 +414,7 @@ void AABCharacter::OnAttackMontageEnded(UAnimMontage* Montage,bool bInterrputed)
 	ABCHECK(CurrentCombo > 0);
 	IsAttacking = false;
 	AttackEndComboState();
+	OnAttackEnd.Broadcast();
 }
 
 void AABCharacter::AttackStartComboState()

@@ -7,6 +7,7 @@
 
 const FName AABAIController::HomePosKey(TEXT("HomePos"));
 const FName AABAIController::PatrolPosKey(TEXT("PatrolPos"));
+const FName AABAIController::TargetKey(TEXT("Target"));
 
 //비헤이비어 트리 쓰기전 
 
