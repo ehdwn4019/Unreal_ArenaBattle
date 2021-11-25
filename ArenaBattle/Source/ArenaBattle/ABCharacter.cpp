@@ -320,6 +320,39 @@ void AABCharacter::PostInitializeComponents()
 	
 }
 
+<<<<<<< HEAD:ArenaBattle/Source/ArenaBattle/ABCharacter.cpp
+=======
+<<<<<<< HEAD:ArenaBattle/Source/ArenaBattle/Private/ABCharacter.cpp
+
+void AABCharacter::PossessedBy(AController * NewController)
+{
+	Super::PossessedBy(NewController);
+
+	if (IsPlayerControlled())
+	{
+		SetControlMode(EControlMode::DIABLO);
+		GetCharacterMovement()->MaxWalkSpeed = 600.0f;
+	}
+	else
+	{
+		SetControlMode(EControlMode::NPC);
+		GetCharacterMovement()->MaxWalkSpeed = 300.0f;
+	}
+}
+
+//void AABCharacter::OnAssetLoadCompleted()
+//{
+//	USkeletalMesh* AssetLoaded = Cast<USkeletalMesh>(AssetStreamingHandle->GetLoadedAsset());
+//	AssetStreamingHandle.Reset();
+//	if (nullptr != AssetLoaded)
+//	{
+//		GetMesh()->SetSkeletalMesh(AssetLoaded);
+//	}
+//}
+
+=======
+>>>>>>> parent of d13147e... - NPC의 추격 기능 구현:ArenaBattle/Source/ArenaBattle/ABCharacter.cpp
+>>>>>>> parent of e6de555... Revert "- INI 설정과 에셋의 지연 로딩":ArenaBattle/Source/ArenaBattle/Private/ABCharacter.cpp
 void AABCharacter::Attack()
 {
 	if (IsAttacking)
