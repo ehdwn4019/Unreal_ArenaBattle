@@ -15,7 +15,6 @@ UABCharacterStatComponent::UABCharacterStatComponent()
 	// ...
 }
 
-
 // Called when the game starts
 void UABCharacterStatComponent::BeginPlay()
 {
